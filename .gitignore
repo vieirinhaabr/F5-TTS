@@ -6,7 +6,8 @@ data/
 ckpts/
 wandb/
 results/
-
+.temp/
+src/f5_tts/train/datasets
 
 
 # Byte-compiled / optimized / DLL files

@@ -98,7 +98,7 @@ def save_prepped_dataset(out_dir, result, duration_list, text_vocab_set, is_fine
     # if tokenizer == "pinyin":
     #     text_vocab_set.update([chr(i) for i in range(32, 127)] + [chr(i) for i in range(192, 256)])
     voca_out_path = out_dir / "vocab.txt"
-    with open(voca_out_path.as_posix(), "w") as f:
+    with open(voca_out_path.as_posix(), "w", encoding="utf-8") as f:
         for vocab in sorted(text_vocab_set):
             f.write(vocab + "\n")
 
@@ -106,7 +106,7 @@ def save_prepped_dataset(out_dir, result, duration_list, text_vocab_set, is_fine
         file_vocab_finetune = PRETRAINED_VOCAB_PATH.as_posix()
         shutil.copy2(file_vocab_finetune, voca_out_path)
     else:
-        with open(voca_out_path, "w") as f:
+        with open(voca_out_path, "w", encoding="utf-8") as f:
             for vocab in sorted(text_vocab_set):
                 f.write(vocab + "\n")
 
