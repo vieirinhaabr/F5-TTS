@@ -43,12 +43,12 @@ vocoder = load_vocoder()
 # load models
 F5TTS_model_cfg = dict(dim=1024, depth=22, heads=16, ff_mult=2, text_dim=512, conv_layers=4)
 F5TTS_ema_model = load_model(
-    DiT, F5TTS_model_cfg, str(cached_path("hf://SWivid/F5-TTS/F5TTS_Base/model_1200000.safetensors"))
+    DiT, F5TTS_model_cfg, str(cached_path("hf://SWivid/F5-TTS/F5TTS_Base/model_1200000.safetensors", cache_dir=".models"))
 )
 
 E2TTS_model_cfg = dict(dim=1024, depth=24, heads=16, ff_mult=4)
 E2TTS_ema_model = load_model(
-    UNetT, E2TTS_model_cfg, str(cached_path("hf://SWivid/E2-TTS/E2TTS_Base/model_1200000.safetensors"))
+    UNetT, E2TTS_model_cfg, str(cached_path("hf://SWivid/E2-TTS/E2TTS_Base/model_1200000.safetensors", cache_dir=".models"))
 )
 
 chat_model_state = None
@@ -495,9 +495,9 @@ Have a conversation with an AI using your reference voice!
                 show_info("Loading chat model...")
                 model_name = "Qwen/Qwen2.5-3B-Instruct"
                 chat_model_state = AutoModelForCausalLM.from_pretrained(
-                    model_name, torch_dtype="auto", device_map="auto"
+                    model_name, torch_dtype="auto", device_map="auto", cache_dir=".models"
                 )
-                chat_tokenizer_state = AutoTokenizer.from_pretrained(model_name)
+                chat_tokenizer_state = AutoTokenizer.from_pretrained(model_name, cache_dir=".models")
                 show_info("Chat model loaded.")
 
             return gr.update(visible=False), gr.update(visible=True)
@@ -509,8 +509,8 @@ Have a conversation with an AI using your reference voice!
 
         if chat_model_state is None:
             model_name = "Qwen/Qwen2.5-3B-Instruct"
-            chat_model_state = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype="auto", device_map="auto")
-            chat_tokenizer_state = AutoTokenizer.from_pretrained(model_name)
+            chat_model_state = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype="auto", device_map="auto", cache_dir=".models")
+            chat_tokenizer_state = AutoTokenizer.from_pretrained(model_name, cache_dir=".models")
 
     with chat_interface_container:
         with gr.Row():

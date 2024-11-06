@@ -53,12 +53,12 @@ class F5TTS:
     def load_ema_model(self, model_type, ckpt_file, vocab_file, ode_method, use_ema):
         if model_type == "F5-TTS":
             if not ckpt_file:
-                ckpt_file = str(cached_path("hf://SWivid/F5-TTS/F5TTS_Base/model_1200000.safetensors"))
+                ckpt_file = str(cached_path("hf://SWivid/F5-TTS/F5TTS_Base/model_1200000.safetensors", cache_dir=".models"))
             model_cfg = dict(dim=1024, depth=22, heads=16, ff_mult=2, text_dim=512, conv_layers=4)
             model_cls = DiT
         elif model_type == "E2-TTS":
             if not ckpt_file:
-                ckpt_file = str(cached_path("hf://SWivid/E2-TTS/E2TTS_Base/model_1200000.safetensors"))
+                ckpt_file = str(cached_path("hf://SWivid/E2-TTS/E2TTS_Base/model_1200000.safetensors", cache_dir=".models"))
             model_cfg = dict(dim=1024, depth=24, heads=16, ff_mult=4)
             model_cls = UNetT
         else:

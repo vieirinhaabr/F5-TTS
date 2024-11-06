@@ -124,7 +124,7 @@ if model == "F5-TTS":
         repo_name = "F5-TTS"
         exp_name = "F5TTS_Base"
         ckpt_step = 1200000
-        ckpt_file = str(cached_path(f"hf://SWivid/{repo_name}/{exp_name}/model_{ckpt_step}.safetensors"))
+        ckpt_file = str(cached_path(f"hf://SWivid/{repo_name}/{exp_name}/model_{ckpt_step}.safetensors", cache_dir=".models"))
         # ckpt_file = f"ckpts/{exp_name}/model_{ckpt_step}.pt"  # .pt | .safetensors; local path
 
 elif model == "E2-TTS":
@@ -134,7 +134,7 @@ elif model == "E2-TTS":
         repo_name = "E2-TTS"
         exp_name = "E2TTS_Base"
         ckpt_step = 1200000
-        ckpt_file = str(cached_path(f"hf://SWivid/{repo_name}/{exp_name}/model_{ckpt_step}.safetensors"))
+        ckpt_file = str(cached_path(f"hf://SWivid/{repo_name}/{exp_name}/model_{ckpt_step}.safetensors", cache_dir=".models"))
         # ckpt_file = f"ckpts/{exp_name}/model_{ckpt_step}.pt"  # .pt | .safetensors; local path
 
 print(f"Using {model}...")
