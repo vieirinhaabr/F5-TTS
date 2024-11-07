@@ -7,7 +7,7 @@ RUN: pip install -e .
 
 ## TO PREPARE DATASET
 RUN: apt install ffmpeg
-RUN: python src\f5_tts\train\datasets\prepare_csv_wavs.py <diretorio> <saida>_pinyin --pretrain
+RUN: python src\f5_tts\train\datasets\prepare_csv_wavs.py <input> <output>_pinyin --pretrain
 
 ## AT EVERY START
 RUN: source venv/bin/activate
