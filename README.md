@@ -43,7 +43,14 @@ pip install git+https://github.com/SWivid/F5-TTS.git
 ```bash
 git clone https://github.com/SWivid/F5-TTS.git
 cd F5-TTS
+# git submodule update --init --recursive  # (optional, if need bigvgan)
 pip install -e .
+```
+If initialize submodule, you should add the following code at the beginning of `src/third_party/BigVGAN/bigvgan.py`.
+```python
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 ```
 
 ### 3. Docker usage
@@ -65,6 +72,7 @@ Currently supported features:
 - Basic TTS with Chunk Inference
 - Multi-Style / Multi-Speaker Generation
 - Voice Chat powered by Qwen2.5-3B-Instruct
+- [Custom model](src/f5_tts/infer/SHARED.md) inference (local only)
 
 ```bash
 # Launch a Gradio app (web interface)
