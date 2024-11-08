@@ -5,7 +5,7 @@ RUN: pip install -e .
 
 # HOW TO FORMAT A DATASET
 RUN: apt install ffmpeg
-RUN: python src\f5_tts\train\datasets\prepare_csv_wavs.py <input> <output>_pinyin --pretrain
+RUN: python src/f5_tts/train/datasets/prepare_csv_wavs.py temp/ptbr2 data/ptbr2_pinyin --pretrain
 
 # TRAINING 
 ## SETTINGS ON A40
