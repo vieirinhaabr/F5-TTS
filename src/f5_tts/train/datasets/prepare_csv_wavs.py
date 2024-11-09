@@ -30,6 +30,8 @@ def is_csv_wavs_format(input_dataset_dir):
 
 
 def prepare_csv_wavs_dir(input_dir):
+    print(f"🎬 prepare_csv_wavs_dir start")
+    
     assert is_csv_wavs_format(input_dir), f"not csv_wavs format: {input_dir}"
     input_dir = Path(input_dir)
     metadata_path = input_dir / "metadata.csv"
@@ -40,7 +42,7 @@ def prepare_csv_wavs_dir(input_dir):
     polyphone = True
     for audio_path, text in audio_path_text_pairs:
         if not Path(audio_path).exists():
-            print(f"audio {audio_path} not found, skipping")
+            print(f"⛔ audio {audio_path} not found, skipping")
             continue
         audio_duration = get_audio_duration(audio_path)
         # assume tokenizer = "pinyin"  ("pinyin" | "char")
@@ -48,16 +50,22 @@ def prepare_csv_wavs_dir(input_dir):
         sub_result.append({"audio_path": audio_path, "text": text, "duration": audio_duration})
         durations.append(audio_duration)
         vocab_set.update(list(text))
+        print(f"✅ audio {audio_path} found, inserting")
 
+    print(f"🏁 prepare_csv_wavs_dir complete")
     return sub_result, durations, vocab_set
 
 
 def get_audio_duration(audio_path):
+    print(f"🎬 get_audio_duration for {audio_path} start")
     audio, sample_rate = torchaudio.load(audio_path)
+    
+    print(f"🏁 get_audio_duration for {audio_path} complete")
     return audio.shape[1] / sample_rate
 
 
 def read_audio_text_pairs(csv_file_path):
+    print(f"🎬 read_audio_text_pairs for {csv_file_path} start")
     audio_text_pairs = []
 
     parent = Path(csv_file_path).parent
@@ -70,11 +78,15 @@ def read_audio_text_pairs(csv_file_path):
                 text = row[1].strip()  # Second column: text
                 audio_file_path = parent / audio_file
                 audio_text_pairs.append((audio_file_path.as_posix(), text))
+                print(f"✅ csv line {audio_file_path} read")
 
+    print(f"🏁 read_audio_text_pairs for {csv_file_path} complete")
     return audio_text_pairs
 
 
 def save_prepped_dataset(out_dir, result, duration_list, text_vocab_set, is_finetune):
+    print(f"🎬 save_prepped_dataset for {out_dir} start")
+    
     out_dir = Path(out_dir)
     # save preprocessed dataset to disk
     out_dir.mkdir(exist_ok=True, parents=True)
@@ -85,6 +97,7 @@ def save_prepped_dataset(out_dir, result, duration_list, text_vocab_set, is_fine
     raw_arrow_path = out_dir / "raw.arrow"
     with ArrowWriter(path=raw_arrow_path.as_posix(), writer_batch_size=1) as writer:
         for line in tqdm(result, desc="Writing to raw.arrow ..."):
+            print(f"✅ write line")
             writer.write(line)
 
     # dup a json separately saving duration in case for DynamicBatchSampler ease
@@ -99,6 +112,7 @@ def save_prepped_dataset(out_dir, result, duration_list, text_vocab_set, is_fine
     voca_out_path = out_dir / "vocab.txt"
     with open(voca_out_path.as_posix(), "w", encoding="utf-8") as f:
         for vocab in sorted(text_vocab_set):
+            print(f"✅ write vocab")
             f.write(vocab + "\n")
 
     if is_finetune:
@@ -107,9 +121,12 @@ def save_prepped_dataset(out_dir, result, duration_list, text_vocab_set, is_fine
     else:
         with open(voca_out_path, "w", encoding="utf-8") as f:
             for vocab in sorted(text_vocab_set):
+                print(f"✅ write vocab for pre train")
                 f.write(vocab + "\n")
 
     dataset_name = out_dir.stem
+    
+    print(f"🏁 save_prepped_dataset for {out_dir} complete")
     print(f"\nFor {dataset_name}, sample count: {len(result)}")
     print(f"For {dataset_name}, vocab size is: {len(text_vocab_set)}")
     print(f"For {dataset_name}, total {sum(duration_list)/3600:.2f} hours")
